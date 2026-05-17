@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8442001413123441" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="MakeCV Pro - Free Professional CV Builder">
+<meta name="author" content="Abubakar">
+<title>MakeCV Pro — Free Professional CV Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#f3f6fb;color:#111827;overflow-x:hidden}
+header{position:sticky;top:0;z-index:999;background:white;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 15px rgba(0,0,0,.05)}
+.logo{font-size:30px;font-weight:800;background:linear-gradient(90deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-btn{background:linear-gradient(90deg,#7c3aed,#06b6d4);color:white;padding:14px 24px;border:none;border-radius:14px;font-weight:600;cursor:pointer}
+.hero{padding:90px 20px 70px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:-40px;background:linear-gradient(rgba(255,255,255,.55),rgba(255,255,255,.55));background-size:cover;background-position:center;opacity:.95;filter:blur(1px);animation:zoomBg 18s ease-in-out infinite alternate;z-index:-1}
+@keyframes zoomBg{from{transform:scale(1)}to{transform:scale(1.12)}}
+.hero h1{font-size:clamp(34px,5vw,60px);font-weight:800;margin-bottom:16px}
+.hero p{max-width:850px;margin:auto;font-size:18px;color:#6b7280;line-height:1.8}
+.main{width:95%;max-width:1400px;margin:auto}
+.section-box,.editor-panel,.preview-area{background:white;border-radius:28px;padding:30px;box-shadow:0 8px 30px rgba(0,0,0,.05);margin-bottom:30px}
+.title{font-size:32px;font-weight:800;margin-bottom:8px}
+.subtitle{color:#6b7280;margin-bottom:25px}
+.template-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.template-card{border:3px solid transparent;border-radius:24px;overflow:hidden;cursor:pointer;transition:.3s;background:white}
+.template-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,.08)}
+.template-card.active{border-color:#7c3aed}
+.template-preview{height:300px;overflow:hidden;background:#f3f4f6}
+.template-name{padding:14px;text-align:center;font-weight:700;font-size:13px}
+.next-btn,.download-btn{width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(90deg,#7c3aed,#06b6d4);color:white;font-size:16px;font-weight:700;cursor:pointer;margin-top:20px}
+.builder-layout{display:grid;grid-template-columns:440px 1fr;gap:30px}
+@media(max-width:1100px){.builder-layout{grid-template-columns:1fr}}
+.editor-panel{position:sticky;top:90px;height:max-content;max-height:82vh;overflow-y:auto}
+@media(max-width:1100px){.editor-panel{position:relative;top:0;max-height:none}}
+.input-group{margin-bottom:16px}
+.input-group label{display:block;margin-bottom:7px;font-weight:600;font-size:13px}
+.input-group input,.input-group textarea,.input-group select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #e5e7eb;background:#f9fafb;outline:none;font-size:13px;resize:vertical}
+.input-group textarea{min-height:48px}
+.drag-drop{border:2px dashed #cbd5e1;padding:22px;text-align:center;border-radius:18px;background:#f9fafb;transition:.3s;cursor:pointer}
+.drag-drop:hover{border-color:#7c3aed;background:#faf5ff}
+.drag-drop img{width:90px;height:90px;object-fit:cover;margin-top:12px;border-radius:8px}
+.color-row{display:flex;gap:8px;flex-wrap:wrap}
+.theme-color{width:38px;height:38px;border-radius:10px;cursor:pointer;border:3px solid transparent;transition:.3s}
+.theme-color:hover{transform:scale(1.15)}
+.theme-color.active{border-color:#111827;box-shadow:0 0 0 4px rgba(0,0,0,.1)}
+.preview-area{overflow:auto}
+.cv-preview{width:794px;margin:auto;background:white;min-height:1123px;border-radius:8px;overflow:hidden;box-shadow:0 12px 35px rgba(0,0,0,.1)}
+.ad-box{background:white;padding:12px;border-radius:16px;margin-bottom:24px}
+.site-footer{text-align:center;padding:30px;color:#6b7280}
+.site-footer a{color:#7c3aed;text-decoration:none;font-weight:600}
+.font-size-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.font-size-controls button{padding:8px 14px;border-radius:10px;border:1.5px solid #e5e7eb;background:#f9fafb;cursor:pointer;font-size:13px;font-weight:600;transition:.2s}
+.font-size-controls button:hover{background:#7c3aed;color:white;border-color:#7c3aed}
+.font-size-controls span{font-size:13px;color:#6b7280;min-width:70px}
+.editor-section-title{font-size:15px;font-weight:700;color:#7c3aed;margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid #f3e8ff}
+@media(max-width:768px){header{padding:14px 18px}.hero h1{font-size:34px}.template-preview{height:220px}.cv-preview{width:100%}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MakeCV Pro</div>
+  <button class="header-btn">Start Building Free</button>
+</header>
+
+<section class="hero">
+  <h1>Create Stunning Professional CVs</h1>
+  <p>Pick a template, fill your details, choose a color, and boom — download your perfect CV instantly!</p>
+</section>
+
+<div class="main">
+<div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8442001413123441" data-ad-slot="5526602533" data-ad-format="horizontal"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
+
+<section class="section-box">
+  <div class="title">1. Select Template</div>
+  <div class="subtitle">Choose your premium design — 18 unique layouts</div>
+  <div class="template-grid" id="templateGrid"></div>
+  <button class="next-btn" onclick="document.getElementById('builderSection').scrollIntoView({behavior:'smooth'})">↓ Fill CV Details</button>
+</section>
+
+<section class="builder-layout" id="builderSection">
+  <div class="editor-panel">
+    <div class="title" style="font-size:24px">2. Edit Resume</div>
+    <div class="subtitle" style="margin-bottom:10px">All changes update live</div>
+
+    <!-- PHOTO -->
+    <div class="editor-section-title">📷 Photo & Style</div>
+    <div class="input-group"><label>Upload Photo</label><div class="drag-drop" id="dropZone"><p style="font-size:13px;color:#6b7280">Drag & Drop OR Click To Upload</p><input type="file" id="photo" hidden accept="image/*"><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" id="previewUpload"></div></div>
+    <div class="input-group"><label>Photo Shape</label><select id="photoShape"><option value="50%">Circle</option><option value="12px">Rounded Square</option><option value="0px">Square</option></select></div>
+
+    <!-- PERSONAL INFO -->
+    <div class="editor-section-title">👤 Personal Information</div>
+    <div class="input-group"><label>Full Name</label><input type="text" id="name" value="Abubakar Azeem"></div>
+    <div class="input-group"><label>Job Title / Role</label><input type="text" id="role" value="IT Expert / Cyber Security Specialist"></div>
+    <div class="input-group"><label>Date of Birth</label><input type="text" id="dob" value="15 March 1997"></div>
+    <div class="input-group"><label>Nationality</label><input type="text" id="nationality" value="Pakistani"></div>
+    <div class="input-group"><label>Marital Status</label><select id="marital"><option>Single</option><option>Married</option><option>Divorced</option><option>Prefer not to say</option></select></div>
+    <div class="input-group"><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
+
+    <!-- CONTACT -->
+    <div class="editor-section-title">📞 Contact Details</div>
+    <div class="input-group"><label>📱 Phone</label><input type="text" id="phone" value="0346-1234567"></div>
+    <div class="input-group"><label>📧 Email</label><input type="email" id="email" value="abubakar@email.com"></div>
+    <div class="input-group"><label>📍 Location / Address</label><input type="text" id="location" value="Narowal, Pakistan"></div>
+    <div class="input-group"><label>🔗 LinkedIn</label><input type="text" id="linkedin" value="linkedin.com/in/abubakar"></div>
+    <div class="input-group"><label>🐙 GitHub</label><input type="text" id="github" value="github.com/abubakar"></div>
+    <div class="input-group"><label>🌐 Portfolio / Website</label><input type="text" id="portfolio" value="abubakar.dev"></div>
+    <div class="input-group"><label>Twitter / X</label><input type="text" id="twitter" value="@abubakar_dev"></div>
+
+    <!-- PROFESSIONAL -->
+    <div class="editor-section-title">💼 Professional Details</div>
+    <div class="input-group"><label>📝 Professional Summary</label><textarea id="summary" rows="3">Dedicated IT Expert with 5+ years experience in Cyber Security, network protection, and penetration testing. Proven ability to secure enterprise systems.</textarea></div>
+    <div class="input-group"><label>💼 Work Experience</label><textarea id="experience" rows="5">Senior Security Analyst | TechCorp | 2022-Present
+• Lead security audits for 50+ enterprise clients
+• Managed a team of 8 security professionals
+
+Security Engineer | WebSecure | 2019-2022
+• Penetration testing on 200+ web applications
+• Reduced breach incidents by 40%</textarea></div>
+    <div class="input-group"><label>🎓 Education</label><textarea id="education" rows="3">BS Computer Science | UET Lahore | 2015-2019 | CGPA: 3.7
+FSc Pre-Engineering | Punjab College | 2013-2015 | 92%</textarea></div>
+    <div class="input-group"><label>🛠️ Skills</label><textarea id="skills" rows="2">Network Security, Python, Linux, Wireshark, SIEM, Cloud Security, Firewalls, Ethical Hacking</textarea></div>
+    <div class="input-group"><label>🌐 Languages</label><textarea id="languages" rows="1">English (Fluent), Urdu (Native), Arabic (Basic)</textarea></div>
+    <div class="input-group"><label>📜 Certifications</label><textarea id="certifications" rows="2">CEH | CISSP | CompTIA Security+ | AWS Security Specialty</textarea></div>
+    <div class="input-group"><label>🏆 Achievements & Awards</label><textarea id="achievements" rows="2">Employee of the Year 2023 | Published security research paper in IEEE | Speaker at CyberFest 2022</textarea></div>
+    <div class="input-group"><label>🎯 Hobbies & Interests</label><textarea id="hobbies" rows="1">CTF Competitions, Open Source Contribution, Chess, Tech Blogging</textarea></div>
+    <div class="input-group"><label>🤝 Volunteer Work</label><textarea id="volunteer" rows="1">Cybersecurity Trainer | FreeCode Pakistan | 2021-Present</textarea></div>
+    <div class="input-group"><label>🌍 Projects</label><textarea id="projects" rows="2">FirewallAI — ML-based intrusion detection system (GitHub: 1.2k stars)
+SecureShell Pro — CLI tool for encrypted remote sessions</textarea></div>
+    <div class="input-group"><label>📎 References</label><textarea id="references" rows="1">Available upon request</textarea></div>
+
+    <!-- FONT SIZE CONTROL -->
+    <div class="editor-section-title">🔠 Font Size Control</div>
+    <div class="input-group">
+      <label>Adjust CV Text Size</label>
+      <div class="font-size-controls">
+        <button onclick="changeFontSize(-1)">A−</button>
+        <button onclick="changeFontSize(1)">A+</button>
+        <span id="fontSizeLabel">Size: 13px</span>
+        <button onclick="resetFontSize()">Reset</button>
+      </div>
+    </div>
+
+    <!-- THEME COLOR -->
+    <div class="editor-section-title">🎨 Theme Color</div>
+    <div class="input-group"><div class="color-row" id="colorRow"></div></div>
+
+    <button class="download-btn" onclick="downloadPDF()">📄 Download PDF CV</button>
+    <!-- BUY ME A COFFEE -->
+<div style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #f59e0b;border-radius:14px;padding:14px 16px;text-align:center;margin-top:16px;">
+  <div style="font-size:15px;font-weight:700;color:#d97706;margin-bottom:4px;">☕ Buy Me a Coffee</div>
+  <div style="font-size:13px;color:#92400e;margin-bottom:4px;">Your support keeps this tool free!</div>
+  <div style="font-size:12px;color:#6b7280;margin-bottom:2px;">Easypaisa:</div>
+  <div style="font-size:19px;font-weight:800;color:#10b981;letter-spacing:1px;">0346-1628906</div>
+  <div style="font-size:11px;color:#9ca3af;margin-top:3px;">Every contribution helps! 🙏</div>
+</div>
+  </div>
+
+  <div class="preview-area">
+<div class="ad-box" style="margin-bottom:15px;"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8442001413123441" data-ad-slot="5526602533" data-ad-format="horizontal"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
+<div class="cv-preview" id="cv"></div>
+</div>
+</section>
+
+<div class="ad-box"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8442001413123441" data-ad-slot="5526602533" data-ad-format="horizontal"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({});</script></div>
+</div>
+
+<div id="policyModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);justify-content:center;align-items:center;z-index:9999;">
+  <div style="background:white;width:92%;max-width:650px;padding:30px;border-radius:28px;">
+    <h2>Privacy Policy & Terms</h2>
+    <p style="line-height:1.9;color:#4b5563;margin-top:15px;">
+All CV data stays in your browser. We do not store your personal information. Google AdSense may use cookies.<br><br>
+<strong>Contact:</strong><br>
+📧 acker04321@gmail.com<br>
+☕ Easypaisa: 0346-1628906
+</p>
+    <button onclick="closePolicy()" style="margin-top:20px;background:#7c3aed;color:white;border:none;padding:14px 22px;border-radius:14px;cursor:pointer;">Close</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p>© 2026 <strong>MakeCV Pro</strong> — Built by <strong>Abubakar</strong></p>
+  <p><a href="#" onclick="openPolicy()">Privacy Policy</a> | <a href="#" onclick="openPolicy()">Terms & Conditions</a></p>
+</footer>
+
+<script>
+// ─── USER PHOTO (stored separately so PDF never gets default icon) ───
+let userPhotoDataUrl = '';
+
+// ─── FONT SIZE STATE ───
+let cvFontSize = 13;
+
+function changeFontSize(delta){
+  cvFontSize = Math.min(22, Math.max(8, cvFontSize + delta));
+  document.getElementById('fontSizeLabel').textContent = 'Size: '+cvFontSize+'px';
+  renderCV();
+}
+function resetFontSize(){
+  cvFontSize = 13;
+  document.getElementById('fontSizeLabel').textContent = 'Size: 13px';
+  renderCV();
+}
+
+// ─── SECTION HELPERS ───
+function fs(){ return cvFontSize+'px'; }
+function fss(){ return (cvFontSize-2)+'px'; }   // small
+function fsl(){ return (cvFontSize+4)+'px'; }   // large title
+function fsh(){ return (cvFontSize+7)+'px'; }   // hero name
+
+function section(title,content,color){
+  if(!content||content.trim()==='')return'';
+  return`<div style="margin-bottom:18px;"><h2 style="color:${color};margin-bottom:7px;font-size:${fsl()};border-bottom:2px solid ${color}25;padding-bottom:4px;">${title}</h2><p style="line-height:1.8;white-space:pre-line;color:#374151;font-size:${fs()};">${content}</p></div>`;
+}
+function sectionDark(title,content,color){
+  if(!content||content.trim()==='')return'';
+  return`<div style="margin-bottom:18px;"><h2 style="color:${color};margin-bottom:7px;font-size:${fsl()};letter-spacing:1px;">${title}</h2><p style="line-height:1.8;white-space:pre-line;color:#cbd5e1;font-size:${fs()};">${content}</p></div>`;
+}
+function skillBadges(skillsStr,color){
+  return skillsStr.split(',').map(s=>`<span style="background:${color}18;color:${color};padding:3px 9px;border-radius:20px;display:inline-block;margin:2px;font-size:${fss()};">${s.trim()}</span>`).join(' ');
+}
+function skillList(skillsStr){
+  return skillsStr.split(',').map(s=>`<div style="margin:3px 0;font-size:${fss()};">• ${s.trim()}</div>`).join('');
+}
+
+// ─── PHOTO HELPER — returns data URL or blank pixel ───
+function getPhoto(){
+  return userPhotoDataUrl || '';
+}
+function photoBlock(size, shape, border){
+  const p = getPhoto();
+  if(!p) return `<div style="width:${size}px;height:${size}px;border-radius:${shape};background:#e5e7eb;display:flex;align-items:center;justify-content:center;border:${border};font-size:${size*0.3}px;">👤</div>`;
+  return `<img src="${p}" style="width:${size}px;height:${size}px;border-radius:${shape};object-fit:cover;border:${border};display:block;">`;
+}
+
+// ─── 18 TEMPLATES ───
+const templates=[
+
+// 1 Modern Sidebar
+{name:'Modern Sidebar',defaultColor:'#1e293b',render:(d,c)=>`
+<div style="display:flex;width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:white;">
+  <div style="width:265px;background:${c};color:white;padding:28px 20px;flex-shrink:0;">
+    <div style="text-align:center;margin-bottom:16px;">${photoBlock(130,d.photoShape,'4px solid white')}</div>
+    <h2 style="font-size:${fsl()};text-align:center;">${d.name}</h2>
+    <p style="font-size:${fss()};opacity:.8;text-align:center;margin-bottom:16px;">${d.role}</p>
+    <h3 style="font-size:${fss()};color:#93c5fd;margin-bottom:6px;">CONTACT</h3>
+    <p style="font-size:${fss()};line-height:2;">📞 ${d.phone}<br>📧 ${d.email}<br>📍 ${d.location}<br>🔗 ${d.linkedin}<br>🐙 ${d.github}<br>🌐 ${d.portfolio}</p>
+    <h3 style="margin-top:14px;font-size:${fss()};color:#93c5fd;margin-bottom:6px;">SKILLS</h3>
+    <p style="font-size:${fss()};line-height:2;">${d.skills.split(',').map(s=>'• '+s.trim()).join('<br>')}</p>
+    <h3 style="margin-top:14px;font-size:${fss()};color:#93c5fd;margin-bottom:6px;">LANGUAGES</h3>
+    <p style="font-size:${fss()};">${d.languages}</p>
+    ${d.hobbies?`<h3 style="margin-top:14px;font-size:${fss()};color:#93c5fd;margin-bottom:6px;">HOBBIES</h3><p style="font-size:${fss()};">${d.hobbies}</p>`:''}
+  </div>
+  <div style="flex:1;padding:36px 32px;">
+    ${section('PROFESSIONAL SUMMARY',d.summary,c)}
+    ${section('WORK EXPERIENCE',d.experience,c)}
+    ${section('EDUCATION',d.education,c)}
+    ${section('PROJECTS',d.projects,c)}
+    ${section('CERTIFICATIONS',d.certifications,c)}
+    ${section('ACHIEVEMENTS',d.achievements,c)}
+    ${section('VOLUNTEER WORK',d.volunteer,c)}
+    ${section('REFERENCES',d.references,c)}
+  </div>
+</div>`},
+
+// 2 Elegant Top
+{name:'Elegant Top',defaultColor:'#7c3aed',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#fef2f2;">
+  <div style="background:linear-gradient(90deg,${c},#06b6d4);color:white;padding:32px;text-align:center;">
+    <div style="display:inline-block;">${photoBlock(95,d.photoShape,'4px solid white')}</div>
+    <h1 style="font-size:${fsh()};margin-top:10px;">${d.name}</h1>
+    <p style="font-size:${fs()};">${d.role}</p>
+    <p style="font-size:${fss()};margin-top:6px;opacity:.9;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location} | 🔗 ${d.linkedin}</p>
+  </div>
+  <div style="padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+    <div>
+      ${section('SUMMARY',d.summary,c)}
+      ${section('EXPERIENCE',d.experience,c)}
+      ${section('PROJECTS',d.projects,c)}
+    </div>
+    <div>
+      ${section('EDUCATION',d.education,c)}
+      ${section('SKILLS',d.skills,c)}
+      ${section('LANGUAGES',d.languages,c)}
+      ${section('CERTIFICATIONS',d.certifications,c)}
+      ${section('ACHIEVEMENTS',d.achievements,c)}
+      ${section('REFERENCES',d.references,c)}
+    </div>
+  </div>
+</div>`},
+
+// 3 Dark Luxury
+{name:'Dark Luxury',defaultColor:'#6366f1',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#0f172a;color:white;display:flex;">
+  <div style="width:240px;background:#1e293b;padding:28px 18px;">
+    <div style="text-align:center;margin-bottom:14px;">${photoBlock(115,d.photoShape,'3px solid '+c)}</div>
+    <h3 style="color:${c};font-size:${fss()};letter-spacing:1px;margin-bottom:6px;">CONTACT</h3>
+    <p style="font-size:${fss()};line-height:2;color:#cbd5e1;">${d.phone}<br>${d.email}<br>${d.location}<br>${d.linkedin}<br>${d.github}</p>
+    <h3 style="color:${c};margin-top:14px;font-size:${fss()};margin-bottom:6px;">SKILLS</h3>
+    ${d.skills.split(',').map(s=>`<div style="margin:4px 0;"><span style="font-size:${fss()};color:#cbd5e1;">${s.trim()}</span><div style="height:3px;background:#334155;border-radius:2px;margin-top:2px;"><div style="height:100%;width:${60+Math.floor(Math.random()*35)}%;background:${c};border-radius:2px;"></div></div></div>`).join('')}
+    <h3 style="color:${c};margin-top:14px;font-size:${fss()};margin-bottom:6px;">LANGUAGES</h3>
+    <p style="font-size:${fss()};color:#cbd5e1;">${d.languages}</p>
+    ${d.hobbies?`<h3 style="color:${c};margin-top:14px;font-size:${fss()};margin-bottom:6px;">HOBBIES</h3><p style="font-size:${fss()};color:#cbd5e1;">${d.hobbies}</p>`:''}
+  </div>
+  <div style="flex:1;padding:36px 30px;">
+    ${sectionDark('PROFILE',d.summary,c)}
+    ${sectionDark('EXPERIENCE',d.experience,c)}
+    ${sectionDark('EDUCATION',d.education,c)}
+    ${sectionDark('PROJECTS',d.projects,c)}
+    ${sectionDark('CERTIFICATIONS',d.certifications,c)}
+    ${sectionDark('ACHIEVEMENTS',d.achievements,c)}
+    ${sectionDark('REFERENCES',d.references,c)}
+  </div>
+</div>`},
+
+// 4 Clean Aqua
+{name:'Clean Aqua',defaultColor:'#06b6d4',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#ecfeff;">
+  <div style="background:linear-gradient(90deg,${c},#14b8a6);color:white;padding:28px;display:flex;align-items:center;gap:20px;">
+    ${photoBlock(88,d.photoShape,'4px solid white')}
+    <div>
+      <h1 style="font-size:${fsh()};">${d.name}</h1>
+      <p style="font-size:${fs()};">${d.role}</p>
+      <p style="font-size:${fss()};margin-top:4px;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location}</p>
+    </div>
+  </div>
+  <div style="padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div>${section('SUMMARY',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('PROJECTS',d.projects,c)}</div>
+    <div>${section('EDUCATION',d.education,c)}${section('SKILLS',d.skills,c)}${section('CERTIFICATIONS',d.certifications,c)}${section('ACHIEVEMENTS',d.achievements,c)}</div>
+  </div>
+</div>`},
+
+// 5 Purple Cards
+{name:'Purple Cards',defaultColor:'#7c3aed',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#faf5ff;">
+  <div style="background:linear-gradient(90deg,${c},#ec4899);color:white;padding:36px;text-align:center;">
+    <div style="display:inline-block;">${photoBlock(105,d.photoShape,'5px solid white')}</div>
+    <h1 style="font-size:${fsh()};margin-top:10px;">${d.name}</h1>
+    <p style="font-size:${fs()};">${d.role}</p>
+  </div>
+  <div style="padding:22px;max-width:700px;margin:auto;">
+    <div style="background:white;padding:14px;border-radius:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.04);">
+      <h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">CONTACT</h2>
+      <p style="font-size:${fss()};">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location} | 🔗 ${d.linkedin} | 🌐 ${d.portfolio}</p>
+    </div>
+    <div style="background:white;padding:14px;border-radius:14px;margin-bottom:10px;"><h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">SUMMARY</h2><p style="font-size:${fs()};">${d.summary}</p></div>
+    <div style="background:white;padding:14px;border-radius:14px;margin-bottom:10px;"><h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">EXPERIENCE</h2><p style="font-size:${fs()};white-space:pre-line;">${d.experience}</p></div>
+    <div style="background:white;padding:14px;border-radius:14px;margin-bottom:10px;"><h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">EDUCATION</h2><p style="font-size:${fs()};white-space:pre-line;">${d.education}</p></div>
+    <div style="background:white;padding:14px;border-radius:14px;margin-bottom:10px;"><h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">SKILLS</h2><p style="font-size:${fss()};">${skillBadges(d.skills,c)}</p></div>
+    ${d.projects?`<div style="background:white;padding:14px;border-radius:14px;margin-bottom:10px;"><h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">PROJECTS</h2><p style="font-size:${fs()};white-space:pre-line;">${d.projects}</p></div>`:''}
+  </div>
+</div>`},
+
+// 6 Warm Executive
+{name:'Warm Executive',defaultColor:'#f97316',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#fff7ed;">
+  <div style="background:linear-gradient(90deg,${c},#facc15);color:white;padding:24px;display:flex;align-items:center;gap:16px;">
+    ${photoBlock(80,d.photoShape,'4px solid white')}
+    <div>
+      <h1 style="font-size:${fsh()};">${d.name}</h1>
+      <p style="font-size:${fs()};">${d.role}</p>
+      <p style="font-size:${fss()};margin-top:4px;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location}</p>
+    </div>
+  </div>
+  <div style="padding:26px;display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div>${section('SUMMARY',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('PROJECTS',d.projects,c)}</div>
+    <div>${section('EDUCATION',d.education,c)}${section('SKILLS',d.skills,c)}${section('CERTIFICATIONS',d.certifications,c)}${section('ACHIEVEMENTS',d.achievements,c)}</div>
+  </div>
+</div>`},
+
+// 7 Minimal White
+{name:'Minimal White',defaultColor:'#374151',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:white;padding:46px 55px;">
+  <div style="text-align:center;margin-bottom:28px;">
+    <div style="display:inline-block;">${photoBlock(95,d.photoShape,'3px solid '+c)}</div>
+    <h1 style="font-size:${fsh()};margin-top:10px;color:${c};">${d.name}</h1>
+    <p style="font-size:${fs()};color:#6b7280;">${d.role}</p>
+    <hr style="width:60px;border:2.5px solid ${c};margin:12px auto;">
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div>${section('SUMMARY',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('PROJECTS',d.projects,c)}</div>
+    <div>${section('EDUCATION',d.education,c)}${section('SKILLS',d.skills,c)}${section('CERTIFICATIONS',d.certifications,c)}${section('ACHIEVEMENTS',d.achievements,c)}</div>
+  </div>
+  <div style="text-align:center;padding:10px;font-size:${fss()};color:#9ca3af;margin-top:10px;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location} | 🔗 ${d.linkedin} | 🌐 ${d.portfolio}</div>
+</div>`},
+
+// 8 Bold Black
+{name:'Bold Black',defaultColor:'#6366f1',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#0a0a0a;color:white;display:flex;">
+  <div style="width:250px;background:#1a1a1a;padding:28px 18px;text-align:center;">
+    ${photoBlock(115,d.photoShape,'3px solid '+c)}
+    <h2 style="font-size:${fsl()};margin-top:12px;color:${c};">${d.name}</h2>
+    <p style="font-size:${fss()};color:#d1d5db;">${d.role}</p>
+    <p style="font-size:${fss()};margin-top:10px;line-height:2;color:#9ca3af;">${d.phone}<br>${d.email}<br>${d.location}<br>${d.linkedin}</p>
+    <h3 style="color:${c};margin-top:14px;font-size:${fss()};margin-bottom:6px;">SKILLS</h3>
+    ${skillList(d.skills)}
+  </div>
+  <div style="flex:1;padding:36px 30px;">
+    ${sectionDark('PROFILE',d.summary,c)}
+    ${sectionDark('EXPERIENCE',d.experience,c)}
+    ${sectionDark('EDUCATION',d.education,c)}
+    ${sectionDark('PROJECTS',d.projects,c)}
+    ${sectionDark('CERTIFICATIONS',d.certifications,c)}
+    ${sectionDark('ACHIEVEMENTS',d.achievements,c)}
+  </div>
+</div>`},
+
+// 9 Green Nature
+{name:'Green Nature',defaultColor:'#16a34a',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#f0fdf4;">
+  <div style="background:linear-gradient(90deg,${c},#22c55e);color:white;padding:32px;text-align:center;">
+    <div style="display:inline-block;">${photoBlock(95,d.photoShape,'4px solid white')}</div>
+    <h1 style="font-size:${fsh()};margin-top:10px;">${d.name}</h1>
+    <p style="font-size:${fs()};">${d.role}</p>
+  </div>
+  <div style="padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+    <div>${section('SUMMARY',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('EDUCATION',d.education,c)}</div>
+    <div>
+      <div style="background:white;padding:14px;border-radius:14px;margin-bottom:12px;">
+        <h2 style="color:${c};font-size:${fsl()};margin-bottom:6px;">CONTACT</h2>
+        <p style="font-size:${fss()};line-height:2;">📞 ${d.phone}<br>📧 ${d.email}<br>📍 ${d.location}<br>🔗 ${d.linkedin}</p>
+      </div>
+      ${section('SKILLS',d.skills,c)}
+      ${section('CERTIFICATIONS',d.certifications,c)}
+      ${section('PROJECTS',d.projects,c)}
+    </div>
+  </div>
+</div>`},
+
+// 10 Rose Gold
+{name:'Rose Gold',defaultColor:'#be185d',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#fff5f6;display:flex;">
+  <div style="width:255px;background:linear-gradient(180deg,${c},#9d174d);color:white;padding:28px 18px;text-align:center;">
+    ${photoBlock(125,d.photoShape,'5px solid white')}
+    <h2 style="margin-top:14px;font-size:${fsl()};">${d.name}</h2>
+    <p style="font-size:${fss()};opacity:.85;">${d.role}</p>
+    <hr style="border-color:rgba(255,255,255,.2);margin:14px 0;">
+    <p style="font-size:${fss()};line-height:2;">📞 ${d.phone}<br>📧 ${d.email}<br>📍 ${d.location}<br>🔗 ${d.linkedin}</p>
+    <hr style="border-color:rgba(255,255,255,.2);margin:14px 0;">
+    <h3 style="font-size:${fss()};margin-bottom:6px;">SKILLS</h3>
+    <p style="font-size:${fss()};line-height:2;">${d.skills.split(',').map(s=>'• '+s.trim()).join('<br>')}</p>
+    ${d.languages?`<hr style="border-color:rgba(255,255,255,.2);margin:14px 0;"><h3 style="font-size:${fss()};margin-bottom:6px;">LANGUAGES</h3><p style="font-size:${fss()};">${d.languages}</p>`:''}
+  </div>
+  <div style="flex:1;padding:36px 30px;background:white;">
+    ${section('SUMMARY',d.summary,c)}
+    ${section('EXPERIENCE',d.experience,c)}
+    ${section('EDUCATION',d.education,c)}
+    ${section('PROJECTS',d.projects,c)}
+    ${section('CERTIFICATIONS',d.certifications,c)}
+    ${section('ACHIEVEMENTS',d.achievements,c)}
+  </div>
+</div>`},
+
+// 11 Blue Corporate
+{name:'Blue Corporate',defaultColor:'#1d4ed8',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:white;">
+  <div style="background:${c};color:white;padding:32px 36px;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <h1 style="font-size:${fsh()};">${d.name}</h1>
+      <p style="font-size:${fs()};opacity:.85;">${d.role}</p>
+    </div>
+    ${photoBlock(90,d.photoShape,'3px solid rgba(255,255,255,.6)')}
+  </div>
+  <div style="background:#eff6ff;padding:12px 36px;font-size:${fss()};display:flex;gap:20px;flex-wrap:wrap;color:#1e40af;">
+    <span>📞 ${d.phone}</span><span>📧 ${d.email}</span><span>📍 ${d.location}</span><span>🔗 ${d.linkedin}</span><span>🌐 ${d.portfolio}</span>
+  </div>
+  <div style="padding:28px 36px;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div>${section('PROFILE',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('PROJECTS',d.projects,c)}</div>
+    <div>${section('EDUCATION',d.education,c)}${section('SKILLS',d.skills,c)}${section('CERTIFICATIONS',d.certifications,c)}${section('ACHIEVEMENTS',d.achievements,c)}</div>
+  </div>
+</div>`},
+
+// 12 Midnight Navy
+{name:'Midnight Navy',defaultColor:'#0ea5e9',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#0c1a2e;color:white;">
+  <div style="padding:36px;text-align:center;border-bottom:1px solid rgba(255,255,255,.1);">
+    ${photoBlock(110,d.photoShape,'4px solid '+c)}
+    <h1 style="font-size:${fsh()};margin-top:12px;color:${c};">${d.name}</h1>
+    <p style="font-size:${fs()};color:#94a3b8;margin-bottom:8px;">${d.role}</p>
+    <p style="font-size:${fss()};color:#64748b;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location} | 🔗 ${d.linkedin}</p>
+  </div>
+  <div style="padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+    <div>${sectionDark('ABOUT',d.summary,c)}${sectionDark('EXPERIENCE',d.experience,c)}${sectionDark('PROJECTS',d.projects,c)}</div>
+    <div>${sectionDark('EDUCATION',d.education,c)}${sectionDark('SKILLS',d.skills,c)}${sectionDark('CERTIFICATIONS',d.certifications,c)}${sectionDark('ACHIEVEMENTS',d.achievements,c)}</div>
+  </div>
+</div>`},
+
+// 13 Gradient Splash
+{name:'Gradient Splash',defaultColor:'#8b5cf6',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:white;">
+  <div style="height:12px;background:linear-gradient(90deg,${c},#ec4899,#06b6d4);"></div>
+  <div style="padding:36px 40px;display:flex;align-items:center;gap:24px;border-bottom:1px solid #f3f4f6;">
+    ${photoBlock(100,d.photoShape,'3px solid '+c)}
+    <div>
+      <h1 style="font-size:${fsh()};color:${c};">${d.name}</h1>
+      <p style="font-size:${fs()};color:#6b7280;margin:4px 0;">${d.role}</p>
+      <p style="font-size:${fss()};color:#9ca3af;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location}</p>
+      <p style="font-size:${fss()};color:#9ca3af;">🔗 ${d.linkedin} | 🐙 ${d.github} | 🌐 ${d.portfolio}</p>
+    </div>
+  </div>
+  <div style="padding:28px 40px;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div>${section('SUMMARY',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('PROJECTS',d.projects,c)}</div>
+    <div>${section('EDUCATION',d.education,c)}${section('SKILLS',d.skills,c)}${section('CERTIFICATIONS',d.certifications,c)}${section('ACHIEVEMENTS',d.achievements,c)}</div>
+  </div>
+</div>`},
+
+// 14 Teal Two-Column
+{name:'Teal Split',defaultColor:'#0f766e',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#f0fdfa;display:flex;">
+  <div style="width:280px;background:${c};color:white;padding:30px 20px;">
+    <div style="text-align:center;margin-bottom:16px;">${photoBlock(120,d.photoShape,'4px solid rgba(255,255,255,.5)')}</div>
+    <h2 style="text-align:center;font-size:${fsl()};margin-bottom:4px;">${d.name}</h2>
+    <p style="text-align:center;font-size:${fss()};opacity:.8;margin-bottom:16px;">${d.role}</p>
+    <div style="background:rgba(255,255,255,.12);border-radius:12px;padding:12px;margin-bottom:12px;">
+      <h3 style="font-size:${fss()};margin-bottom:6px;color:#99f6e4;">CONTACT</h3>
+      <p style="font-size:${fss()};line-height:1.9;">📞 ${d.phone}<br>📧 ${d.email}<br>📍 ${d.location}<br>🔗 ${d.linkedin}</p>
+    </div>
+    <div style="background:rgba(255,255,255,.12);border-radius:12px;padding:12px;margin-bottom:12px;">
+      <h3 style="font-size:${fss()};margin-bottom:6px;color:#99f6e4;">SKILLS</h3>
+      <p style="font-size:${fss()};line-height:2;">${d.skills.split(',').map(s=>'✓ '+s.trim()).join('<br>')}</p>
+    </div>
+    <div style="background:rgba(255,255,255,.12);border-radius:12px;padding:12px;">
+      <h3 style="font-size:${fss()};margin-bottom:6px;color:#99f6e4;">LANGUAGES</h3>
+      <p style="font-size:${fss()};">${d.languages}</p>
+    </div>
+  </div>
+  <div style="flex:1;padding:34px 28px;">
+    ${section('SUMMARY',d.summary,c)}
+    ${section('EXPERIENCE',d.experience,c)}
+    ${section('EDUCATION',d.education,c)}
+    ${section('PROJECTS',d.projects,c)}
+    ${section('CERTIFICATIONS',d.certifications,c)}
+    ${section('ACHIEVEMENTS',d.achievements,c)}
+  </div>
+</div>`},
+
+// 15 Classic Timeline
+{name:'Classic Timeline',defaultColor:'#dc2626',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:white;padding:40px 50px;">
+  <div style="display:flex;align-items:center;gap:24px;margin-bottom:28px;border-bottom:3px solid ${c};padding-bottom:20px;">
+    ${photoBlock(95,d.photoShape,'3px solid '+c)}
+    <div>
+      <h1 style="font-size:${fsh()};color:${c};">${d.name}</h1>
+      <p style="font-size:${fs()};color:#374151;font-weight:600;">${d.role}</p>
+      <p style="font-size:${fss()};color:#6b7280;margin-top:4px;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location} | 🔗 ${d.linkedin}</p>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;">
+    <div>
+      ${section('ABOUT ME',d.summary,c)}
+      <div style="margin-bottom:18px;">
+        <h2 style="color:${c};font-size:${fsl()};border-bottom:2px solid ${c}25;padding-bottom:4px;margin-bottom:8px;">SKILLS</h2>
+        <div>${skillBadges(d.skills,c)}</div>
+      </div>
+      ${section('LANGUAGES',d.languages,c)}
+      ${section('CERTIFICATIONS',d.certifications,c)}
+    </div>
+    <div>
+      ${section('EXPERIENCE',d.experience,c)}
+      ${section('EDUCATION',d.education,c)}
+      ${section('PROJECTS',d.projects,c)}
+      ${section('ACHIEVEMENTS',d.achievements,c)}
+    </div>
+  </div>
+</div>`},
+
+// 16 Pastel Creative
+{name:'Pastel Creative',defaultColor:'#a855f7',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#fdf4ff;">
+  <div style="background:${c}18;padding:36px;display:flex;align-items:center;gap:24px;border-bottom:3px solid ${c}40;">
+    ${photoBlock(100,d.photoShape,'4px solid '+c)}
+    <div>
+      <h1 style="font-size:${fsh()};color:${c};">${d.name}</h1>
+      <p style="font-size:${fs()};color:#374151;">${d.role}</p>
+      <p style="font-size:${fss()};color:#6b7280;margin-top:6px;">📞 ${d.phone} | 📧 ${d.email} | 📍 ${d.location}</p>
+      <p style="font-size:${fss()};color:#6b7280;">🔗 ${d.linkedin} | 🐙 ${d.github} | 🌐 ${d.portfolio}</p>
+    </div>
+  </div>
+  <div style="padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:22px;">
+    <div>${section('PROFILE',d.summary,c)}${section('EXPERIENCE',d.experience,c)}${section('PROJECTS',d.projects,c)}</div>
+    <div>
+      <div style="background:${c}12;padding:14px;border-radius:14px;margin-bottom:14px;">
+        <h2 style="color:${c};font-size:${fsl()};margin-bottom:8px;">SKILLS</h2>
+        ${skillBadges(d.skills,c)}
+      </div>
+      ${section('EDUCATION',d.education,c)}
+      ${section('CERTIFICATIONS',d.certifications,c)}
+      ${section('HOBBIES',d.hobbies,c)}
+    </div>
+  </div>
+</div>`},
+
+// 17 Compact Pro
+{name:'Compact Pro',defaultColor:'#0369a1',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:white;">
+  <div style="background:${c};color:white;padding:22px 32px;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <h1 style="font-size:${fsh()};">${d.name}</h1>
+      <p style="font-size:${fs()};opacity:.85;">${d.role}</p>
+    </div>
+    ${photoBlock(80,d.photoShape,'3px solid rgba(255,255,255,.7)')}
+  </div>
+  <div style="background:#e0f2fe;padding:10px 32px;font-size:${fss()};display:flex;gap:18px;flex-wrap:wrap;color:${c};">
+    <span>📞 ${d.phone}</span><span>📧 ${d.email}</span><span>📍 ${d.location}</span><span>🔗 ${d.linkedin}</span><span>🐙 ${d.github}</span>
+  </div>
+  <div style="padding:22px 32px;display:grid;grid-template-columns:1.2fr 1fr;gap:22px;">
+    <div>
+      ${section('PROFILE',d.summary,c)}
+      ${section('EXPERIENCE',d.experience,c)}
+      ${section('PROJECTS',d.projects,c)}
+      ${section('VOLUNTEER',d.volunteer,c)}
+    </div>
+    <div>
+      ${section('EDUCATION',d.education,c)}
+      <div style="margin-bottom:18px;">
+        <h2 style="color:${c};font-size:${fsl()};border-bottom:2px solid ${c}25;padding-bottom:4px;margin-bottom:8px;">SKILLS</h2>
+        ${skillBadges(d.skills,c)}
+      </div>
+      ${section('CERTIFICATIONS',d.certifications,c)}
+      ${section('ACHIEVEMENTS',d.achievements,c)}
+      ${section('LANGUAGES',d.languages,c)}
+    </div>
+  </div>
+</div>`},
+
+// 18 Orange Impact
+{name:'Orange Impact',defaultColor:'#ea580c',render:(d,c)=>`
+<div style="width:794px;min-height:1123px;font-family:Poppins,sans-serif;background:#fff7ed;display:flex;">
+  <div style="width:260px;background:${c};color:white;padding:28px 18px;">
+    <div style="text-align:center;margin-bottom:16px;">${photoBlock(120,d.photoShape,'4px solid rgba(255,255,255,.6)')}</div>
+    <h2 style="text-align:center;font-size:${fsl()};margin-bottom:4px;">${d.name}</h2>
+    <p style="text-align:center;font-size:${fss()};opacity:.85;margin-bottom:16px;">${d.role}</p>
+    <h3 style="font-size:${fss()};color:#fed7aa;margin-bottom:6px;">CONTACT</h3>
+    <p style="font-size:${fss()};line-height:1.9;">📞 ${d.phone}<br>📧 ${d.email}<br>📍 ${d.location}<br>🔗 ${d.linkedin}<br>🌐 ${d.portfolio}</p>
+    <h3 style="font-size:${fss()};color:#fed7aa;margin-top:14px;margin-bottom:6px;">SKILLS</h3>
+    <p style="font-size:${fss()};line-height:2;">${d.skills.split(',').map(s=>'▸ '+s.trim()).join('<br>')}</p>
+    <h3 style="font-size:${fss()};color:#fed7aa;margin-top:14px;margin-bottom:6px;">LANGUAGES</h3>
+    <p style="font-size:${fss()};">${d.languages}</p>
+    ${d.hobbies?`<h3 style="font-size:${fss()};color:#fed7aa;margin-top:14px;margin-bottom:6px;">HOBBIES</h3><p style="font-size:${fss()};">${d.hobbies}</p>`:''}
+  </div>
+  <div style="flex:1;padding:34px 28px;">
+    ${section('PROFILE',d.summary,c)}
+    ${section('EXPERIENCE',d.experience,c)}
+    ${section('EDUCATION',d.education,c)}
+    ${section('PROJECTS',d.projects,c)}
+    ${section('CERTIFICATIONS',d.certifications,c)}
+    ${section('ACHIEVEMENTS',d.achievements,c)}
+    ${section('REFERENCES',d.references,c)}
+  </div>
+</div>`}
+
+]; // end templates
+
+// ─── 24 THEME COLORS ───
+let activeTemplate=0, activeColor=0;
+const colorOptions=[
+  '#7c3aed','#06b6d4','#2563eb','#16a34a','#dc2626','#f97316',
+  '#111827','#ff006e','#000000','#be185d','#0f766e','#7c2d12',
+  '#6366f1','#0ea5e9','#a855f7','#059669','#b45309','#1d4ed8',
+  '#9333ea','#e11d48','#0369a1','#15803d','#c2410c','#6d28d9'
+];
+
+// ─── GET DATA ───
+function getData(){
+  return{
+    photo: getPhoto(),
+    photoShape: document.getElementById('photoShape').value,
+    name: document.getElementById('name').value,
+    role: document.getElementById('role').value,
+    dob: document.getElementById('dob').value,
+    nationality: document.getElementById('nationality').value,
+    marital: document.getElementById('marital').value,
+    gender: document.getElementById('gender').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value,
+    location: document.getElementById('location').value,
+    linkedin: document.getElementById('linkedin').value,
+    github: document.getElementById('github').value,
+    portfolio: document.getElementById('portfolio').value,
+    twitter: document.getElementById('twitter').value,
+    summary: document.getElementById('summary').value,
+    experience: document.getElementById('experience').value,
+    education: document.getElementById('education').value,
+    skills: document.getElementById('skills').value,
+    languages: document.getElementById('languages').value,
+    certifications: document.getElementById('certifications').value,
+    achievements: document.getElementById('achievements').value,
+    hobbies: document.getElementById('hobbies').value,
+    volunteer: document.getElementById('volunteer').value,
+    projects: document.getElementById('projects').value,
+    references: document.getElementById('references').value
+  };
+}
+
+// ─── RENDER ───
+function renderCV(){
+  document.getElementById('cv').innerHTML = templates[activeTemplate].render(getData(), colorOptions[activeColor]);
+}
+
+function renderTemplates(){
+  document.getElementById('templateGrid').innerHTML = templates.map((t,i)=>
+    `<div class="template-card${i===activeTemplate?' active':''}" onclick="selectTemplate(${i})">
+      <div class="template-preview">
+        <div style="transform:scale(.28);transform-origin:top left;width:357%;height:357%;">
+          ${t.render(getData(),t.defaultColor)}
+        </div>
+      </div>
+      <div class="template-name">${t.name}</div>
+    </div>`
+  ).join('');
+}
+
+function selectTemplate(i){ activeTemplate=i; renderCV(); renderTemplates(); }
+
+function renderColors(){
+  document.getElementById('colorRow').innerHTML = colorOptions.map((c,i)=>
+    `<div class="theme-color ${i===activeColor?'active':''}" style="background:${c}" onclick="changeColor(${i})" title="${c}"></div>`
+  ).join('');
+}
+
+function changeColor(i){ activeColor=i; renderColors(); renderCV(); renderTemplates(); }
+
+// ─── PHOTO UPLOAD — store in userPhotoDataUrl, never show default in PDF ───
+const dz = document.getElementById('dropZone');
+dz.addEventListener('click', ()=> document.getElementById('photo').click());
+document.getElementById('photo').addEventListener('change', function(e){
+  const f = e.target.files[0];
+  if(f){
+    const r = new FileReader();
+    r.onload = function(ev){
+      userPhotoDataUrl = ev.target.result;              // store for PDF
+      document.getElementById('previewUpload').src = ev.target.result;
+      renderCV(); renderTemplates();
+    };
+    r.readAsDataURL(f);
+  }
+});
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.style.borderColor='#7c3aed'; });
+dz.addEventListener('dragleave', ()=>{ dz.style.borderColor='#cbd5e1'; });
+dz.addEventListener('drop', function(e){
+  e.preventDefault();
+  const f = e.dataTransfer.files[0];
+  if(f){
+    const r = new FileReader();
+    r.onload = function(ev){
+      userPhotoDataUrl = ev.target.result;
+      document.getElementById('previewUpload').src = ev.target.result;
+      renderCV(); renderTemplates();
+    };
+    r.readAsDataURL(f);
+  }
+});
+
+// ─── PDF DOWNLOAD (photo fix: useCORS + allowTaint + scale 3) ───
+async function downloadPDF(){
+  const btn = document.querySelector('.download-btn');
+  btn.textContent = '⏳ Generating PDF...';
+  btn.disabled = true;
+  try {
+    const el = document.getElementById('cv');
+    // Ensure the rendered CV has correct photo before capture
+    renderCV();
+    await new Promise(r => setTimeout(r, 200)); // slight delay for render
+    const canvas = await html2canvas(el, {
+      scale: 3,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false
+    });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p','mm','a4');
+    const w = 210;
+    const h = (canvas.height * w) / canvas.width;
+    pdf.addImage(canvas.toDataURL('image/png', 1.0), 'PNG', 0, 0, w, h);
+    pdf.save('MakeCV_Pro_' + getData().name.replace(/\s+/g,'_') + '.pdf');
+  } catch(err) {
+    alert('PDF generation failed. Please try again.');
+    console.error(err);
+  }
+  btn.textContent = '📄 Download PDF CV';
+  btn.disabled = false;
+}
+
+// ─── POLICY ───
+function openPolicy(){ document.getElementById('policyModal').style.display='flex'; }
+function closePolicy(){ document.getElementById('policyModal').style.display='none'; }
+
+// ─── LIVE UPDATE ───
+document.querySelectorAll('input,textarea,select').forEach(el=>{
+  el.addEventListener('input', ()=>{ renderCV(); renderTemplates(); });
+});
+
+// ─── INIT ───
+renderTemplates();
+renderColors();
+renderCV();
+</script>
+</body>
+</html>
